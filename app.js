@@ -1,4 +1,4 @@
-const CATEGORIES = [
+const DEFAULT_CATEGORIES = [
   "Towel", "Napkin", "Bedsheet", "Comforter Set", "Carpet",
   "Aasan", "Lungi", "Shawl", "Towel Set", "Doormat",
   "Runner Set", "Dohar", "Blanket"
@@ -7,7 +7,9 @@ const CATEGORIES = [
 const PRODUCTS_KEY = "rajaHandloomProductsV1";
 const CART_KEY = "rajaHandloomCartV1";
 const BUYER_KEY = "rajaHandloomBuyerV1";
+const CATEGORIES_KEY = "rajaHandloomCategoriesV1";
 
+let categories = readStore(CATEGORIES_KEY, DEFAULT_CATEGORIES);
 let products = readStore(PRODUCTS_KEY, []);
 let cart = readStore(CART_KEY, []);
 let selectedCategory = "All Categories";
@@ -52,7 +54,7 @@ function makeId() {
 }
 
 function setupCategories() {
-  $("categorySelect").innerHTML = CATEGORIES.map(
+  $("categorySelect").innerHTML = categories.map(
     (category) =>
       `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
   ).join("");
@@ -61,9 +63,9 @@ function setupCategories() {
 }
 
 function renderCategoryFilters() {
-  const categories = ["All Categories", ...CATEGORIES];
+  const allCategories = ["All Categories", ...categories];
 
-  $("categoryFilters").innerHTML = categories.map((category) => `
+  $("categoryFilters").innerHTML = allCategories.map((category) => `
     <button
       class="filter-chip ${selectedCategory === category ? "active" : ""}"
       data-category="${escapeHtml(category)}"
@@ -252,14 +254,12 @@ function updateTotals() {
 }
 
 function saveBuyerDetails() {
-  const buyer = {
+  saveStore(BUYER_KEY, {
     name: $("buyerName").value,
     phone: $("buyerPhone").value,
     gst: $("buyerGst").value,
     address: $("buyerAddress").value
-  };
-
-  saveStore(BUYER_KEY, buyer);
+  });
 }
 
 function loadBuyerDetails() {
@@ -290,18 +290,11 @@ async function compressImage(file) {
     img.src = dataUrl;
   });
 
-  const scale = Math.min(
-    1,
-    750 / image.width,
-    750 / image.height
-  );
-
+  const scale = Math.min(1, 750 / image.width, 750 / image.height);
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(image.width * scale);
   canvas.height = Math.round(image.height * scale);
-
-  const context = canvas.getContext("2d");
-  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
 
   return canvas.toDataURL("image/jpeg", 0.7);
 }
@@ -321,7 +314,7 @@ $("productForm").addEventListener("submit", async (event) => {
     }
   }
 
-  const product = {
+  products.unshift({
     id: makeId(),
     category: $("categorySelect").value,
     name: $("productName").value.trim(),
@@ -329,14 +322,37 @@ $("productForm").addEventListener("submit", async (event) => {
     price: Number($("productPrice").value),
     unit: $("productUnit").value,
     image
-  };
+  });
 
-  products.unshift(product);
   saveStore(PRODUCTS_KEY, products);
-
   event.target.reset();
   renderProducts();
   alert("Product saved.");
+});
+
+$("categoryForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const newCategory = $("newCategoryInput").value.trim();
+  if (!newCategory) return;
+
+  const alreadyExists = categories.some(
+    (category) => category.toLowerCase() === newCategory.toLowerCase()
+  );
+
+  if (alreadyExists) {
+    alert("This category already exists.");
+    return;
+  }
+
+  categories.push(newCategory);
+  saveStore(CATEGORIES_KEY, categories);
+
+  $("newCategoryInput").value = "";
+  selectedCategory = newCategory;
+
+  setupCategories();
+  renderProducts();
 });
 
 $("productGrid").addEventListener("click", (event) => {
@@ -349,14 +365,9 @@ $("productGrid").addEventListener("click", (event) => {
   const deleteButton = event.target.closest("[data-delete-product]");
 
   if (deleteButton) {
-    const shouldDelete = confirm(
-      "Delete this product and remove it from the cart?"
-    );
-
-    if (!shouldDelete) return;
+    if (!confirm("Delete this product and remove it from the cart?")) return;
 
     const id = deleteButton.dataset.deleteProduct;
-
     products = products.filter((item) => item.id !== id);
     cart = cart.filter((item) => item.productId !== id);
 
@@ -400,10 +411,8 @@ $("cartItems").addEventListener("click", (event) => {
   }
 });
 
-// Update the cart when a quantity is typed.
 $("cartItems").addEventListener("input", (event) => {
   const input = event.target.closest("[data-qty-input]");
-
   if (!input || input.value === "") return;
 
   const row = cart.find(
@@ -414,7 +423,6 @@ $("cartItems").addEventListener("input", (event) => {
 
   if (row && quantity >= 1) {
     row.qty = quantity;
-
     saveStore(CART_KEY, cart);
 
     $("cartCount").textContent = cart.reduce(
@@ -426,10 +434,8 @@ $("cartItems").addEventListener("input", (event) => {
   }
 });
 
-// Make sure the quantity is at least 1 when leaving the quantity box.
 $("cartItems").addEventListener("change", (event) => {
   const input = event.target.closest("[data-qty-input]");
-
   if (!input) return;
 
   const row = cart.find(
@@ -438,11 +444,7 @@ $("cartItems").addEventListener("change", (event) => {
 
   if (!row) return;
 
-  const quantity = Math.max(
-    1,
-    Math.floor(Number(input.value) || 1)
-  );
-
+  const quantity = Math.max(1, Math.floor(Number(input.value) || 1));
   row.qty = quantity;
   input.value = quantity;
 
@@ -458,7 +460,6 @@ $("cartItems").addEventListener("change", (event) => {
 
 $("categoryFilters").addEventListener("click", (event) => {
   const button = event.target.closest("[data-category]");
-
   if (!button) return;
 
   selectedCategory = button.dataset.category;
@@ -467,7 +468,6 @@ $("categoryFilters").addEventListener("click", (event) => {
 });
 
 $("searchInput").addEventListener("input", renderProducts);
-
 $("discountInput").addEventListener("input", updateTotals);
 $("shippingInput").addEventListener("input", updateTotals);
 
@@ -476,9 +476,7 @@ $("shippingInput").addEventListener("input", updateTotals);
 });
 
 $("clearCartBtn").addEventListener("click", () => {
-  if (cart.length > 0 && !confirm("Clear the cart?")) {
-    return;
-  }
+  if (cart.length > 0 && !confirm("Clear the cart?")) return;
 
   cart = [];
   saveStore(CART_KEY, cart);
@@ -523,16 +521,8 @@ $("printBillBtn").addEventListener("click", () => {
     return sum + (product ? Number(product.price) * row.qty : 0);
   }, 0);
 
-  const discount = Math.max(
-    0,
-    Number($("discountInput").value) || 0
-  );
-
-  const shipping = Math.max(
-    0,
-    Number($("shippingInput").value) || 0
-  );
-
+  const discount = Math.max(0, Number($("discountInput").value) || 0);
+  const shipping = Math.max(0, Number($("shippingInput").value) || 0);
   const total = Math.max(0, subtotal - discount) + shipping;
 
   const rows = cart.map((row, index) => {
@@ -607,10 +597,7 @@ function updateConnectionStatus() {
   const status = $("connectionStatus");
   const isOnline = navigator.onLine;
 
-  status.textContent = isOnline
-    ? "Online"
-    : "Offline · App ready";
-
+  status.textContent = isOnline ? "Online" : "Offline · App ready";
   status.classList.toggle("offline", !isOnline);
 }
 
@@ -625,10 +612,8 @@ updateConnectionStatus();
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("./service-worker.js")
-      .catch((error) => {
-        console.log("Offline cache setup failed:", error);
-      });
+    navigator.serviceWorker.register("./service-worker.js").catch((error) => {
+      console.log("Offline cache setup failed:", error);
+    });
   });
 }

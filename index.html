@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#294938">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="RAJA HANDLOOM">
   <title>RAJA HANDLOOM | Order & Billing</title>
   <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icon-192.png">
   <link rel="stylesheet" href="./style.css">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="RAJA HANDLOOM">
-<link rel="apple-touch-icon" href="./icon-192.png">
 </head>
 <body>
   <header class="topbar">
@@ -74,6 +74,12 @@
       </div>
 
       <nav id="categoryFilters" class="category-filters" aria-label="Product categories"></nav>
+
+      <form id="categoryForm" class="add-category-row">
+        <input id="newCategoryInput" type="text" placeholder="New category name" required>
+        <button class="button button-dark" type="submit">＋ Add Category</button>
+      </form>
+
       <div id="productGrid" class="product-grid"></div>
     </section>
 

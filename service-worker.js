@@ -1,4 +1,4 @@
-const CACHE_NAME = "raja-handloom-offline-v2";
+const CACHE_NAME = "raja-handloom-offline-v3";
 
 const APP_FILES = [
   "./",
@@ -22,11 +22,16 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key.startsWith("raja-handloom-offline-") && key !== CACHE_NAME)
+          .filter(
+            (key) =>
+              key.startsWith("raja-handloom-offline-") &&
+              key !== CACHE_NAME
+          )
           .map((key) => caches.delete(key))
       )
     )
   );
+
   self.clients.claim();
 });
 
