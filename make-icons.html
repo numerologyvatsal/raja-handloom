@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RAJA HANDLOOM Icon Maker</title>
+  <style>
+    body { font: 16px Arial; padding: 30px; background: #fbf8f2; color: #25221f; }
+    button { padding: 12px 18px; margin: 8px; border: 0; border-radius: 8px;
+      color: white; background: #335f4b; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>RAJA HANDLOOM App Icons</h2>
+  <p>Click each button and save both PNG files in your website folder.</p>
+  <button onclick="downloadIcon(192)">Download 192 × 192 icon</button>
+  <button onclick="downloadIcon(512)">Download 512 × 512 icon</button>
+
+  <script>
+    function downloadIcon(size) {
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#294938";
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.strokeStyle = "#d6b887";
+      ctx.lineWidth = size * 0.018;
+      ctx.strokeRect(size * 0.10, size * 0.10, size * 0.80, size * 0.80);
+
+      ctx.strokeStyle = "rgba(214,184,135,.38)";
+      ctx.lineWidth = size * 0.008;
+      for (let i = 0; i < 5; i++) {
+        const y = size * (0.18 + i * 0.035);
+        ctx.beginPath();
+        ctx.moveTo(size * 0.20, y);
+        ctx.lineTo(size * 0.80, y);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "#fff8e9";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = `bold ${size * 0.31}px Arial`;
+      ctx.fillText("RH", size / 2, size * 0.49);
+
+      ctx.fillStyle = "#e1c99f";
+      ctx.font = `bold ${size * 0.075}px Arial`;
+      ctx.letterSpacing = `${size * 0.012}px`;
+      ctx.fillText("HANDLOOM", size / 2, size * 0.73);
+
+      canvas.toBlob((blob) => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `icon-${size}.png`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }, "image/png");
+    }
+  </script>
+</body>
+</html>

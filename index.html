@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#294938">
+  <title>RAJA HANDLOOM | Order & Billing</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./style.css">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RAJA HANDLOOM">
+<link rel="apple-touch-icon" href="./icon-192.png">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-mark">RH</span>
+      <span><strong>RAJA HANDLOOM</strong><small>WHOLESALE · TEXTILES</small></span>
+    </a>
+    <span id="connectionStatus" class="connection-status">Checking connection…</span>
+  </header>
+
+  <main class="layout">
+    <section class="catalog">
+      <div class="welcome">
+        <div>
+          <p class="eyebrow">ORDER DESK</p>
+          <h1>Create a new order</h1>
+          <p>Add products, prepare the cart, and print a bill.</p>
+        </div>
+        <button id="showFormBtn" class="button button-light" type="button">＋ Add Product</button>
+      </div>
+
+      <section id="productFormPanel" class="panel form-panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">PRODUCT CATALOG</p><h2>Add product / variety</h2></div>
+          <button id="hideFormBtn" class="icon-button" type="button" aria-label="Close">×</button>
+        </div>
+
+        <form id="productForm" class="product-form">
+          <label>Category
+            <select id="categorySelect" required></select>
+          </label>
+          <label>Product / variety name
+            <input id="productName" type="text" placeholder="e.g. Cotton Bath Towel" required>
+          </label>
+          <label>Design / code
+            <input id="productDesign" type="text" placeholder="e.g. Design 01">
+          </label>
+          <label>Price (₹)
+            <input id="productPrice" type="number" min="0" step="0.01" placeholder="0" required>
+          </label>
+          <label>Unit
+            <select id="productUnit">
+              <option>Piece</option>
+              <option>Pair</option>
+              <option>Set</option>
+              <option>Dozen</option>
+              <option>Meter</option>
+              <option>Kg</option>
+            </select>
+          </label>
+          <label class="upload-label">Design photo
+            <input id="productImage" type="file" accept="image/*">
+            <small>Photo is saved in this browser. Smaller photos work best.</small>
+          </label>
+          <button class="button button-dark form-submit" type="submit">Save Product</button>
+        </form>
+      </section>
+
+      <div class="section-heading">
+        <div><p class="eyebrow">YOUR COLLECTION</p><h2>Products</h2></div>
+        <input id="searchInput" class="search" type="search" placeholder="Search products…">
+      </div>
+
+      <nav id="categoryFilters" class="category-filters" aria-label="Product categories"></nav>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <aside class="order-panel panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">CURRENT ORDER</p><h2>Cart <span id="cartCount" class="count">0</span></h2></div>
+        <button id="clearCartBtn" class="text-button" type="button">Clear Cart</button>
+      </div>
+
+      <div id="cartItems" class="cart-items"></div>
+
+      <div class="buyer-fields">
+        <h3>Trader / Customer Details</h3>
+        <label>Name <input id="buyerName" type="text" placeholder="Trader or customer name"></label>
+        <div class="two-fields">
+          <label>Mobile <input id="buyerPhone" type="tel" placeholder="Mobile number"></label>
+          <label>GSTIN <input id="buyerGst" type="text" placeholder="Optional"></label>
+        </div>
+        <label>Address <textarea id="buyerAddress" rows="2" placeholder="Address"></textarea></label>
+      </div>
+
+      <div class="bill-options">
+        <label>Discount (₹) <input id="discountInput" type="number" min="0" step="0.01" value="0"></label>
+        <label>Extra charge / freight (₹) <input id="shippingInput" type="number" min="0" step="0.01" value="0"></label>
+      </div>
+
+      <div class="totals">
+        <div><span>Subtotal</span><strong id="subtotalValue">₹0.00</strong></div>
+        <div><span>Discount</span><strong id="discountValue">− ₹0.00</strong></div>
+        <div><span>Extra charge</span><strong id="shippingValue">₹0.00</strong></div>
+        <div class="grand-total"><span>Total</span><strong id="totalValue">₹0.00</strong></div>
+      </div>
+
+      <button id="printBillBtn" class="button button-accent print-button" type="button">Create / Print Bill</button>
+      <p class="privacy-note">Your data is saved in this browser on this device.</p>
+    </aside>
+  </main>
+
+  <section id="invoice" class="invoice"></section>
+  <script src="./app.js"></script>
+</body>
+</html>
