@@ -3,7 +3,7 @@ RAJA HANDLOOM - Static billing app
 
 FILES
 - index.html, style.css, app.js: the complete app
-- manifest.webmanifest, service-worker.js: install and offline support
+- manifest.webmanifest, service-worker.js: install and offline support (new install identity; existing browser data remains on the same site origin)
 - icon-192.png, icon-512.png: app icons
 
 USE IN VS CODE
@@ -34,4 +34,4 @@ FEATURES
 IMPORTANT DATA NOTES
 The app uses this browser's local storage. Data is not automatically shared with other phones, browsers, or computers. Clearing browser/site data can erase saved products, design photos, and history. Adding many high-resolution photos may use the browser's local storage; images are compressed automatically, but add a reasonable number at a time. Keep the same website address when updating the site. Bills created before this version was installed cannot be recovered into the new history automatically.
 
-For reliable offline loading, first open the published site while online and wait until the page has loaded. If Chrome still shows "Could not open app", remove the old home-screen shortcut, open the HTTPS website again, refresh it, then install from Chrome's menu.
+For reliable offline loading, first open the published site while online and wait until the page has loaded. If Chrome shows that an older app is already installed, keep this update's new manifest identity and install it as the new RAJA HANDLOOM app. Avoid clearing all data for numerologyvatsal.github.io if other GitHub Pages sites use that domain, because local site data may be shared across those project paths.

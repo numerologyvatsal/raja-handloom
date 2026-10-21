@@ -134,6 +134,6 @@
   ['customerName','customerPhone','customerGstin','customerAddress'].forEach(id=>$(id).addEventListener('input',persistBuyer));
   window.addEventListener('online',()=>{$('onlineStatus').classList.remove('offline');$('onlineStatus').innerHTML='<i></i> Online';});window.addEventListener('offline',()=>{$('onlineStatus').classList.add('offline');$('onlineStatus').innerHTML='<i></i> Offline';});
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;$('installBtn').classList.remove('hidden');});$('installBtn').addEventListener('click',async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$('installBtn').classList.add('hidden');});window.addEventListener('appinstalled',()=>toast('RAJA HANDLOOM installed'));
-  if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js',{scope:'./'}).catch(()=>{}));
+  if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js',{scope:'./',updateViaCache:'none'}).then(registration=>registration.update()).catch(()=>{}));
   renderProducts();renderCart();renderHistory();renderManageCollections();renderCustomerGallery();
 })();
