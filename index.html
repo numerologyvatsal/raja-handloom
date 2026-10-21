@@ -2,123 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#294938">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173f35">
+  <meta name="description" content="RAJA HANDLOOM product catalog, cart, billing and order history.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="RAJA HANDLOOM">
-  <title>RAJA HANDLOOM | Order & Billing</title>
-  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./style.css">
+  <title>RAJA HANDLOOM | Billing</title>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#">
-      <span class="brand-mark">RH</span>
-      <span><strong>RAJA HANDLOOM</strong><small>WHOLESALE · TEXTILES</small></span>
-    </a>
-    <span id="connectionStatus" class="connection-status">Checking connection…</span>
+    <div class="brand"><div class="brand-mark">RH</div><div><strong>RAJA HANDLOOM</strong><small>Product & billing desk</small></div></div>
+    <div class="header-actions"><button id="installBtn" class="button button-light hidden" type="button">Install app</button><span id="onlineStatus" class="status"><i></i> Online</span></div>
   </header>
-
-  <main class="layout">
-    <section class="catalog">
-      <div class="welcome">
-        <div>
-          <p class="eyebrow">ORDER DESK</p>
-          <h1>Create a new order</h1>
-          <p>Add products, prepare the cart, and print a bill.</p>
-        </div>
-        <button id="showFormBtn" class="button button-light" type="button">＋ Add Product</button>
+  <main class="page">
+    <section class="intro"><div><p class="eyebrow">YOUR BUSINESS, ORGANIZED</p><h1>Billing made simple.</h1><p class="muted">Manage products, prepare customer bills and revisit saved orders.</p></div><div class="intro-actions"><button class="button button-light" id="galleryOpen" type="button">Design gallery</button><button class="button button-light" id="historyOpen" type="button">Order history <span id="historyCount" class="count-pill">0</span></button><button class="button button-primary" id="addProductOpen" type="button">＋ Add product</button></div></section>
+    <section class="stats" aria-label="Quick summary"><article class="stat-card"><span>Products</span><strong id="productCount">0</strong></article><article class="stat-card"><span>Categories</span><strong id="categoryCount">0</strong></article><article class="stat-card"><span>Cart items</span><strong id="cartCount">0</strong></article></section>
+    <section class="workspace">
+      <div class="catalog panel">
+        <div class="section-heading"><div><p class="eyebrow">CATALOG</p><h2>Products</h2></div><div class="catalog-tools"><button id="manageDesignsOpen" class="text-button" type="button">＋ Manage designs</button><button id="addCategoryOpen" class="text-button" type="button">＋ New category</button></div></div>
+        <div class="filters"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search products…" autocomplete="off"></label><select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option></select><select id="subcategoryFilter" aria-label="Filter by subcategory"><option value="all">All subcategories</option></select></div>
+        <div id="productGrid" class="product-grid"></div>
+        <div id="emptyProducts" class="empty-state hidden"><div class="empty-icon">▤</div><strong>No products found</strong><p>Add a product to start making a bill.</p><button class="button button-primary" id="emptyAddProduct" type="button">Add first product</button></div>
       </div>
-
-      <section id="productFormPanel" class="panel form-panel">
-        <div class="panel-heading">
-          <div><p class="eyebrow">PRODUCT CATALOG</p><h2>Add product / variety</h2></div>
-          <button id="hideFormBtn" class="icon-button" type="button" aria-label="Close">×</button>
-        </div>
-
-        <form id="productForm" class="product-form">
-          <label>Category
-            <select id="categorySelect" required></select>
-          </label>
-          <label>Product / variety name
-            <input id="productName" type="text" placeholder="e.g. Cotton Bath Towel" required>
-          </label>
-          <label>Design / code
-            <input id="productDesign" type="text" placeholder="e.g. Design 01">
-          </label>
-          <label>Price (₹)
-            <input id="productPrice" type="number" min="0" step="0.01" placeholder="0" required>
-          </label>
-          <label>Unit
-            <select id="productUnit">
-              <option>Piece</option>
-              <option>Pair</option>
-              <option>Set</option>
-              <option>Dozen</option>
-              <option>Meter</option>
-              <option>Kg</option>
-            </select>
-          </label>
-          <label class="upload-label">Design photo
-            <input id="productImage" type="file" accept="image/*">
-            <small>Photo is saved in this browser. Smaller photos work best.</small>
-          </label>
-          <button class="button button-dark form-submit" type="submit">Save Product</button>
+      <aside class="cart panel">
+        <div class="section-heading"><div><p class="eyebrow">CURRENT BILL</p><h2>Cart <span id="cartBadge" class="count-pill">0</span></h2></div><button id="clearCart" class="text-button danger-text" type="button">Clear</button></div>
+        <div id="cartItems" class="cart-items"></div>
+        <div id="emptyCart" class="cart-empty">Your cart is empty.<br><span>Add products from the catalog.</span></div>
+        <form id="billForm" autocomplete="on">
+          <div class="form-divider"><span>Customer details</span></div>
+          <div class="field"><label for="customerName">Customer name</label><input id="customerName" name="name" placeholder="Customer name"></div>
+          <div class="field-row"><div class="field"><label for="customerPhone">Mobile</label><input id="customerPhone" name="tel" inputmode="tel" placeholder="Mobile number"></div><div class="field"><label for="customerGstin">GSTIN</label><input id="customerGstin" placeholder="Optional"></div></div>
+          <div class="field"><label for="customerAddress">Address</label><textarea id="customerAddress" rows="2" placeholder="Optional address"></textarea></div>
+          <div class="field-row"><div class="field"><label for="discountInput">Discount (₹)</label><input id="discountInput" type="number" inputmode="decimal" min="0" step="0.01" value="0"></div><div class="field"><label for="freightInput">Freight (₹)</label><input id="freightInput" type="number" inputmode="decimal" min="0" step="0.01" value="0"></div></div>
+          <div class="totals"><div><span>Subtotal</span><strong id="subtotalValue">₹0.00</strong></div><div><span>Discount</span><strong id="discountValue">− ₹0.00</strong></div><div><span>Freight</span><strong id="freightValue">₹0.00</strong></div><div class="grand-total"><span>Total</span><strong id="totalValue">₹0.00</strong></div></div>
+          <button id="saveBillBtn" class="button button-primary full-width" type="submit">Save bill & print</button>
+          <p class="privacy-note">Bills and catalog are saved in this browser on this device.</p>
         </form>
-      </section>
-
-      <div class="section-heading">
-        <div><p class="eyebrow">YOUR COLLECTION</p><h2>Products</h2></div>
-        <input id="searchInput" class="search" type="search" placeholder="Search products…">
-      </div>
-
-      <nav id="categoryFilters" class="category-filters" aria-label="Product categories"></nav>
-
-      <form id="categoryForm" class="add-category-row">
-        <input id="newCategoryInput" type="text" placeholder="New category name" required>
-        <button class="button button-dark" type="submit">＋ Add Category</button>
-      </form>
-
-      <div id="productGrid" class="product-grid"></div>
+      </aside>
     </section>
-
-    <aside class="order-panel panel">
-      <div class="panel-heading">
-        <div><p class="eyebrow">CURRENT ORDER</p><h2>Cart <span id="cartCount" class="count">0</span></h2></div>
-        <button id="clearCartBtn" class="text-button" type="button">Clear Cart</button>
-      </div>
-
-      <div id="cartItems" class="cart-items"></div>
-
-      <div class="buyer-fields">
-        <h3>Trader / Customer Details</h3>
-        <label>Name <input id="buyerName" type="text" placeholder="Trader or customer name"></label>
-        <div class="two-fields">
-          <label>Mobile <input id="buyerPhone" type="tel" placeholder="Mobile number"></label>
-          <label>GSTIN <input id="buyerGst" type="text" placeholder="Optional"></label>
-        </div>
-        <label>Address <textarea id="buyerAddress" rows="2" placeholder="Address"></textarea></label>
-      </div>
-
-      <div class="bill-options">
-        <label>Discount (₹) <input id="discountInput" type="number" min="0" step="0.01" value="0"></label>
-        <label>Extra charge / freight (₹) <input id="shippingInput" type="number" min="0" step="0.01" value="0"></label>
-      </div>
-
-      <div class="totals">
-        <div><span>Subtotal</span><strong id="subtotalValue">₹0.00</strong></div>
-        <div><span>Discount</span><strong id="discountValue">− ₹0.00</strong></div>
-        <div><span>Extra charge</span><strong id="shippingValue">₹0.00</strong></div>
-        <div class="grand-total"><span>Total</span><strong id="totalValue">₹0.00</strong></div>
-      </div>
-
-      <button id="printBillBtn" class="button button-accent print-button" type="button">Create / Print Bill</button>
-      <p class="privacy-note">Your data is saved in this browser on this device.</p>
-    </aside>
+    <footer>RAJA HANDLOOM <span>•</span> Works offline after the first visit</footer>
   </main>
-
-  <section id="invoice" class="invoice"></section>
-  <script src="./app.js"></script>
+  <dialog id="productDialog" class="dialog"><form id="productForm" method="dialog"><div class="dialog-head"><div><p class="eyebrow">CATALOG</p><h2 id="productDialogTitle">Add product</h2></div><button class="icon-button" type="button" data-close="productDialog" aria-label="Close">×</button></div><input id="editProductId" type="hidden"><div class="field"><label for="productName">Product name *</label><input id="productName" required maxlength="80" placeholder="e.g. Cotton towel"></div><div class="field-row"><div class="field"><label for="productCategory">Category *</label><select id="productCategory" required></select></div><div class="field"><label for="productPrice">Price (₹) *</label><input id="productPrice" type="number" inputmode="decimal" min="0" step="0.01" required placeholder="0.00"></div></div><div class="field"><label for="productSubcategory">Subcategory / collection</label><select id="productSubcategory"><option value="">No subcategory</option></select></div><div class="field"><label for="productUnit">Unit</label><input id="productUnit" maxlength="24" value="Piece" placeholder="Piece, set, kg…"></div><div class="field"><label for="productPhoto">Product photo</label><input id="productPhoto" type="file" accept="image/*"><small class="field-hint">Photo is resized to save space on your device.</small></div><div class="dialog-actions"><button class="button button-light" type="button" data-close="productDialog">Cancel</button><button class="button button-primary" type="submit">Save product</button></div></form></dialog>
+  <dialog id="categoryDialog" class="dialog dialog-small"><form id="categoryForm" method="dialog"><div class="dialog-head"><div><p class="eyebrow">CATALOG</p><h2>New category</h2></div><button class="icon-button" type="button" data-close="categoryDialog" aria-label="Close">×</button></div><div class="field"><label for="categoryName">Category name *</label><input id="categoryName" maxlength="40" required placeholder="e.g. Table cloth"></div><div class="dialog-actions"><button class="button button-light" type="button" data-close="categoryDialog">Cancel</button><button class="button button-primary" type="submit">Add category</button></div></form></dialog>
+  <dialog id="designManagerDialog" class="dialog history-dialog"><div class="dialog-head"><div><p class="eyebrow">CATALOG ORGANIZATION</p><h2>Manage subcategories & designs</h2></div><button class="icon-button" type="button" data-close="designManagerDialog" aria-label="Close">×</button></div><p class="manager-intro">Create a subcategory under a main category, then add photos for customers to browse in the Design gallery.</p><form id="subcategoryForm" class="manager-create"><div class="field-row"><div class="field"><label for="subcategoryMainCategory">Main category *</label><select id="subcategoryMainCategory" required></select></div><div class="field"><label for="subcategoryName">Subcategory name *</label><input id="subcategoryName" required maxlength="50" placeholder="e.g. Ritugold"></div></div><button class="button button-primary" type="submit">Add subcategory</button></form><div class="form-divider"><span>Add design photos</span></div><div class="field"><label for="designCollectionSelect">Choose subcategory</label><select id="designCollectionSelect"></select></div><div class="field"><label for="designPhotoFiles">Design photos</label><input id="designPhotoFiles" type="file" accept="image/*" multiple><small class="field-hint">You can select several photos. Images are resized and saved on this device.</small></div><div id="manageCollectionList" class="manage-collection-list"></div></dialog>
+  <dialog id="customerGalleryDialog" class="dialog gallery-dialog"><div class="dialog-head"><div><p class="eyebrow">RAJA HANDLOOM</p><h2>Browse designs</h2></div><button class="icon-button" type="button" data-close="customerGalleryDialog" aria-label="Close">×</button></div><p class="manager-intro">Choose a product category and collection to view its designs.</p><div class="field-row"><div class="field"><label for="galleryCategorySelect">Main category</label><select id="galleryCategorySelect"></select></div><div class="field"><label for="gallerySubcategorySelect">Subcategory</label><select id="gallerySubcategorySelect"></select></div></div><div id="customerGalleryGrid" class="customer-gallery-grid"></div><div id="emptyGallery" class="empty-state hidden"><div class="empty-icon">▧</div><strong>No design photos yet</strong><p>Ask us to add designs for this collection.</p></div></dialog>
+  <dialog id="historyDialog" class="dialog history-dialog"><div class="dialog-head"><div><p class="eyebrow">SAVED LOCALLY</p><h2>Order history</h2></div><button class="icon-button" type="button" data-close="historyDialog" aria-label="Close">×</button></div><div id="historyList" class="history-list"></div><div id="emptyHistory" class="empty-state hidden"><div class="empty-icon">◷</div><strong>No saved bills yet</strong><p>Completed bills will appear here.</p></div></dialog>
+  <dialog id="billViewDialog" class="dialog history-dialog"><div class="dialog-head"><div><p class="eyebrow">SAVED BILL</p><h2>Bill details</h2></div><button class="icon-button" type="button" data-close="billViewDialog" aria-label="Close">×</button></div><div id="billDetails"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
 </body>
 </html>
