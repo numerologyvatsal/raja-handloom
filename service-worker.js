@@ -1,4 +1,4 @@
-const CACHE_NAME = 'raja-handloom-shell-v7';
+const CACHE_NAME = 'raja-handloom-shell-v8';
 const APP_FILES = [
   './', './index.html', './style.css', './app.js', './manifest.webmanifest',
   './icon-192.png', './icon-512.png'

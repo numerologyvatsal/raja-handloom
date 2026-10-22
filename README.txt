@@ -12,12 +12,14 @@ USE IN VS CODE
 3. In VS Code, open index.html with Live Server to preview it.
 4. To update your existing GitHub Pages site, copy/replace these files in the same repository, then run:
    git add .
-   git commit -m "Add order history and category tools"
+   git commit -m "Refresh RAJA HANDLOOM workspace design"
    git push
 5. Wait for GitHub Pages to publish. Open the HTTPS site in Chrome and reload once while online.
 6. On Android Chrome, use the menu (three dots) > Install app or Add to Home screen.
 
 FEATURES
+- Premium textile-inspired forest green, ivory and brass visual refresh
+- Cleaner sales dashboard, responsive mobile layout, refined cards and dialogs
 - English interface, responsive on phones
 - Add/edit/delete products and add custom categories
 - Create subcategories under a main category (for example Towel > Ritugold)
